@@ -27,7 +27,7 @@ class PreferencesActivity : AppCompatActivity() {
 
         // Initialize Places API
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, "AIzaSyAzw31iuVjsRWwcbffDDTPi12RqWiZHH_U") // Replace with your API key
+            Places.initialize(applicationContext, "YOUR_API_KEY")
         }
 
         // Initialize SharedPreferences

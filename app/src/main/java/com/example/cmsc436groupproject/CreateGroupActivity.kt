@@ -38,7 +38,7 @@ class CreateGroupActivity : AppCompatActivity() {
 
         // Initialize Places API
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, "AIzaSyAzw31iuVjsRWwcbffDDTPi12RqWiZHH_U") // Replace with your API key
+            Places.initialize(applicationContext, "YOUR_API_KEY")
         }
 
         // Set up Places Autocomplete for location field
