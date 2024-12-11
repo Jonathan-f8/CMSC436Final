@@ -1,10 +1,12 @@
-package com.example.cmsc436groupproject
+package com.example.cmsc436groupproject.controller
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.cmsc436groupproject.GroupDetailsActivity
+import com.example.cmsc436groupproject.R
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         val groupDetailsButton: Button = findViewById(R.id.group_details_button)
         groupDetailsButton.setOnClickListener {
-            val intent = Intent(this, GroupDetailsActivity::class.java)
+            val intent = Intent(this, GroupDetailsActivity::class.java) // Assuming this exists
             startActivity(intent)
         }
 
@@ -31,14 +33,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Link create_group button to CreateGroupActivity
         val createGroupButton: Button = findViewById(R.id.create_group)
         createGroupButton.setOnClickListener {
             val intent = Intent(this, CreateGroupActivity::class.java)
             startActivity(intent)
         }
 
-        // Link go button to GroupsActivity
         val goButton: Button = findViewById(R.id.go)
         goButton.setOnClickListener {
             val intent = Intent(this, GroupsActivity::class.java)

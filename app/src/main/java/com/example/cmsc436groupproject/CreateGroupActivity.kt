@@ -1,20 +1,21 @@
-package com.example.cmsc436groupproject
+package com.example.cmsc436groupproject.controller
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.example.cmsc436groupproject.R
+import com.example.cmsc436groupproject.StudyGroup
+import com.example.cmsc436groupproject.StudyGroupRepository
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.firebase.database.DatabaseError
 
 class CreateGroupActivity : AppCompatActivity() {
 
-    private lateinit var database: DatabaseReference
     private lateinit var groupNameInput: EditText
     private lateinit var subjectInput: EditText
     private lateinit var locationInput: EditText
@@ -22,12 +23,11 @@ class CreateGroupActivity : AppCompatActivity() {
     private lateinit var maxSizeInput: EditText
     private var locationSelected: String? = null
 
+    private val studyGroupRepository = StudyGroupRepository()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_group)
-
-        // Initialize Firebase Database reference
-        database = FirebaseDatabase.getInstance().reference
 
         // Initialize UI components
         groupNameInput = findViewById(R.id.group_name)
@@ -38,7 +38,7 @@ class CreateGroupActivity : AppCompatActivity() {
 
         // Initialize Places API
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, "YOUR_API_KEY")
+            Places.initialize(applicationContext, "YOUR_API_KEY_HERE")
         }
 
         // Set up Places Autocomplete for location field
@@ -61,35 +61,28 @@ class CreateGroupActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Save the group to Firebase
+            // Create the group object and add via repository
             val group = StudyGroup(groupName, subject, locationSelected!!, time, maxSize)
-            database.child("groups").push().setValue(group)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Group created successfully!", Toast.LENGTH_SHORT).show()
-                    finish()
+            studyGroupRepository.addGroup(group, object : StudyGroupRepository.AddGroupCallback {
+                override fun onGroupAdded(success: Boolean) {
+                    if (success) {
+                        Toast.makeText(this@CreateGroupActivity, "Group created successfully!", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this@CreateGroupActivity, "Failed to create group", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Failed to create group", Toast.LENGTH_SHORT).show()
-                }
+            })
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            val place = Autocomplete.getPlaceFromIntent(data!!)
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK && data != null) {
+            val place = Autocomplete.getPlaceFromIntent(data)
             locationSelected = place.address
             locationInput.setText(locationSelected)
             Toast.makeText(this, "Location selected: $locationSelected", Toast.LENGTH_SHORT).show()
         }
     }
-
-    // Data class to represent a Group
-    data class StudyGroup(
-        val groupName: String,
-        val subject: String,
-        val location: String,
-        val time: String,
-        val maxSize: Int
-    )
 }

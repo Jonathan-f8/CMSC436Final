@@ -1,10 +1,12 @@
-package com.example.cmsc436groupproject
+package com.example.cmsc436groupproject.view
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cmsc436groupproject.R
+import com.example.cmsc436groupproject.StudyGroup
 
 class GroupsAdapter(private val groupsList: List<StudyGroup>) :
     RecyclerView.Adapter<GroupsAdapter.GroupViewHolder>() {
@@ -17,7 +19,6 @@ class GroupsAdapter(private val groupsList: List<StudyGroup>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
-        // Use `R.layout.group_item` instead of `R.layout.groups`
         val view = LayoutInflater.from(parent.context).inflate(R.layout.group_item, parent, false)
         return GroupViewHolder(view)
     }
