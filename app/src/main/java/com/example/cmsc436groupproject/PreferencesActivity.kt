@@ -1,13 +1,13 @@
-package com.example.cmsc436groupproject.controller
+package com.example.cmsc436groupproject
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.cmsc436groupproject.R
-import com.example.cmsc436groupproject.LocalPreferences
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
@@ -18,10 +18,9 @@ class PreferencesActivity : AppCompatActivity() {
     private lateinit var groupSizeSeekBar: SeekBar
     private lateinit var groupSizeText: TextView
     private lateinit var submitButton: Button
+    private lateinit var sharedPreferences: SharedPreferences
     private var locationInput: String? = null
     private var groupSize: Int = 3 // Default group size
-
-    private lateinit var localPreferences: LocalPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +28,11 @@ class PreferencesActivity : AppCompatActivity() {
 
         // Initialize Places API
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, "YOUR_API_KEY_HERE")
+            Places.initialize(applicationContext, "AIzaSyAzw31iuVjsRWwcbffDDTPi12RqWiZHH_U\n")
         }
 
-        localPreferences = LocalPreferences(this)
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
 
         // Initialize UI components
         groupSizeSeekBar = findViewById(R.id.group_size_seekbar)
@@ -45,6 +45,7 @@ class PreferencesActivity : AppCompatActivity() {
                 groupSize = progress
                 groupSizeText.text = "Preferred Group Size: $groupSize"
             }
+
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
@@ -69,9 +70,20 @@ class PreferencesActivity : AppCompatActivity() {
 
         // Submit button functionality
         submitButton.setOnClickListener {
-            localPreferences.savePreferences(groupSize, locationInput)
+            savePreferences()
             Toast.makeText(this, "Preferences saved!", Toast.LENGTH_SHORT).show()
-            finish()
+            finish() // Return to the previous screen
         }
+    }
+
+    private fun savePreferences() {
+        val editor = sharedPreferences.edit()
+        editor.putInt("preferred_group_size", groupSize)
+        editor.putString("preferred_location", locationInput)
+        editor.apply()
+        // Debugging log
+        val savedGroupSize = sharedPreferences.getInt("preferred_group_size", -1)
+        val savedLocation = sharedPreferences.getString("preferred_location", "None")
+        Log.d("PreferencesActivity", "Saved Group Size: $savedGroupSize, Location: $savedLocation")
     }
 }

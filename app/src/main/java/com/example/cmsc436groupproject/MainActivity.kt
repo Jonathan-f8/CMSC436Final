@@ -6,6 +6,8 @@ import android.widget.Button
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cmsc436groupproject.GroupDetailsActivity
+import com.example.cmsc436groupproject.GroupsActivity
+import com.example.cmsc436groupproject.PreferencesActivity
 import com.example.cmsc436groupproject.R
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
