@@ -14,7 +14,7 @@ class GroupDetailsActivity : AppCompatActivity() {
         val ratingText: TextView = findViewById(R.id.rating_text)
 
         ratingBar.setOnRatingBarChangeListener { _, rating, _ ->
-            ratingText.text = "You rated this group: $rating stars"
+            ratingText.text = "You rated this app: $rating stars"
         }
     }
 }

@@ -22,7 +22,7 @@
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Review Your Group"
+        android:text="Review this app"
         android:backgroundTint="#F00"
         android:textColor="#F000"
         android:textSize="30dp"
